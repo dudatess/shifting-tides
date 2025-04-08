@@ -1,0 +1,12 @@
+[
+    {
+      "id": "vote_yes",
+      "type": "vote",
+      "value": "yes"
+    },
+    {
+      "id": "vote_no",
+      "type": "vote",
+      "value": "no"
+    }
+  ]
