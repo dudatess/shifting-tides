@@ -3,133 +3,113 @@
         "id": "trade_001",
         "type": "normal",
         "title": "Political Favor",
-        "description": "Trade 10% People to gain 15% Influence."
+        "description": "For every player that offers 10 people they get 15 of influence." ,
+        "effect": { 
+            "others" : {
+              "people" : -10 ,
+              "influence" : 15
+            }, 
+            "self" : {
+              "people" : -10 ,
+              "influence" : 15
+            }
+        }
     },
     {
         "id": "trade_002",
         "type": "normal",
         "title": "Fund the Movement",
-        "description": "Lose 12% Money, gain 20% People."
+        "description": "Lose 10 Money, gain 15 People." ,
+        "effect": { 
+          "others" : {
+            "money" : -10 ,
+            "people" : 15
+          }, 
+          "self" : {
+            "money" : -10 ,
+            "people" : 15
+          }
+      }
     },
     {
         "id": "trade_003",
         "type": "normal",
         "title": "Resource Swap",
-        "description": "Offer to trade 8% Influence for 10% Money from any player who accepts."
-    },
-    {
-        "id": "trade_004",
-        "type": "normal",
-        "title": "Shared Agenda",
-        "description": "Give 5% Money to all other players and receive 8% People from each."
-    },
-        {
-        "id": "trade_005",
-        "type": "fiftyfifty",
-        "title": "The Public Deal",
-        "description": "Visible: Trade 10% Money to gain 15% People. Hidden: If 2 or more players vote Yes, they each lose 5% Money.",
-        "hiddenEffect": {
-            "yesVotes": 2,
-            "othersLose": {
-                "money": 5
+        "description": "Offer to trade 10 Influence for 10 Money from any player who accepts." ,
+        "effect": { 
+          "others" : {
+            "influence" : -10 ,
+            "money" : 10
+          }, 
+          "self" : {
+            "money" : 10 ,
+            "influence" : -10
             }
-        }
+      }
     },
     {
-        "id": "trade_006",
-        "type": "fiftyfifty",
-        "title": "The Peace Pact",
-        "description": "Visible: Trade 5% People for 10% Influence. Hidden: If everyone votes No, gain 15% Money.",
-        "hiddenEffect": {
-            "noVotes": 3,
-            "gain": {
-                "money": 15
-            }
-        }
+      "id": "trade_003",
+      "type": "normal",
+      "title": "Resource Swap",
+      "description": "Offer to trade 10 people for 10 Money from any player who accepts." ,
+      "effect": { 
+        "others" : {
+          "people" : -10 ,
+          "money" : 10
+        }, 
+        "self" : {
+          "money" : 10 ,
+          "people" : -10
+          }
+       }
     },
     {
-        "id": "trade_007",
-        "type": "fiftyfifty",
-        "title": "Temporary Alliance",
-        "description": "Visible: Swap 10% Influence with one player. Hidden: If only 1 player votes Yes, they lose 10% People."
-    },
-        {
-        "id": "trade_008",
-        "type": "joker",
-        "title": "The Great Betrayal",
-        "description": "If all players vote No, they each lose 10% Money, and you receive all their lost funds."
-    },
-    {
-        "id": "trade_009",
-        "type": "joker",
-        "title": "The Bribe",
-        "description": "If exactly 1 player votes Yes, you gain 20% Influence. They lose 20% Money."
-    },
-    {
-        "id": "trade_010",
-        "type": "joker",
-        "title": "Red Button",
-        "description": "Everyone who votes Yes gains 10% People, but the player who drew the card gains 30% Money if even one person says Yes."
-    },
-    {
+      "id": "trade_003",
+      "type": "normal",
+      "title": "Resource Swap",
+      "description": "Offer to trade 10 people for 10 influence from any player who accepts." ,
+      "effect": { 
+        "others" : {
+          "people" : -10 ,
+          "influence" : 10
+        }, 
+        "self" : {
+          "influence" : 10 ,
+          "people" : -10
+          }
+       }
+      },
+      {
         "id": "trade_011",
         "type": "normal",
         "title": "Charity Campaign",
-        "description": "Lose 8% Money to gain 14% People."
+        "description": "Lose 10 Money to gain 15 People." ,
+        "effect": { 
+        "others" : {
+          "people" : 15 ,
+          "money" : -10
+        }, 
+        "self" : {
+          "money" : -10 ,
+          "people" : 15
+          }
+       }
       },
       {
         "id": "trade_012",
         "type": "normal",
         "title": "Influencer Partnership",
-        "description": "Trade 12% People to gain 18% Influence."
-      },
-      {
-        "id": "trade_013",
-        "type": "normal",
-        "title": "Silent Donation",
-        "description": "Give 10% Money to another player, receive 15% People from them."
-      },
-      {
-        "id": "trade_014",
-        "type": "normal",
-        "title": "Covert Influence",
-        "description": "Lose 6% People, gain 11% Influence."
-      },
-      {
-        "id": "trade_015",
-        "type": "fiftyfifty",
-        "title": "Shady Deal",
-        "description": "Visible: Trade 5% Money to gain 10% Influence. Hidden: If 3 players vote Yes, they each lose 4% People."
-      },
-      {
-        "id": "trade_016",
-        "type": "fiftyfifty",
-        "title": "Media Spin",
-        "description": "Visible: Swap 6% People for 12% Influence. Hidden: If everyone votes No, gain 18% Money."
-      },
-      {
-        "id": "trade_017",
-        "type": "fiftyfifty",
-        "title": "Mutual Aid",
-        "description": "Visible: Give 5% Money to one player. Hidden: If they vote Yes, you also gain 10% Influence."
-      },
-      {
-        "id": "trade_018",
-        "type": "joker",
-        "title": "Power Surge",
-        "description": "If even one player votes Yes, gain 25% Influence. All Yes voters lose 12% People."
-      },
-      {
-        "id": "trade_019",
-        "type": "joker",
-        "title": "Collapse and Conquer",
-        "description": "If everyone votes No, each loses 15% Money. You gain 35% Influence."
-      },
-      {
-        "id": "trade_020",
-        "type": "joker",
-        "title": "Blood Pact",
-        "description": "If 2 players vote Yes, they each gain 10% People. You gain 20% Money and 10% Influence."
+        "description": "Trade 15 People to gain 10 Influence.", 
+        "effect": { 
+        "others" : {
+          "people" : -15 ,
+          "influence" : 10
+        }, 
+        "self" : {
+          "influence" : 10 ,
+          "people" : -15
+          }
+       }
       }
 ]
   

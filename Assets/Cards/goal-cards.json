@@ -1,97 +1,107 @@
 [
     {
       "id": "goal_001",
+      "type" : "achieve",
       "title": "Shadow Ruler",
-      "description": "End the game by achieving 100% Influence and at least 60% of People."
+      "description": "End the game by achieving 100 Influence and at least 60 of People.",
+      "resources": { 
+        "people" : 60,
+        "influence" : 100
+      }
     },
     {
       "id": "goal_002",
-      "title": "Master Manipulator",
-      "description": "Convince at least two players to vote Yes on your trade cards three turns in a row."
+      "type" : "rounds" , 
+      "title": "Civilian Hero",
+      "description": "Achieve a state of 90 money by the end of 6th round." ,
+      "resources": { 
+        "money" : 90
+      },
+        "rounds" : 6
     },
     {
       "id": "goal_003",
+      "type" : "rounds" , 
       "title": "Civilian Hero",
-      "description": "Achieve more than 90% People after the X-th round and never cause another player to lose People."
+      "description": "Achieve a state of 90 people by the end of 6th round." ,
+      "resources": { 
+        "people" : 90
+      },
+        "rounds" : 6
     },
     {
       "id": "goal_004",
+      "type" : "all_count" ,
       "title": "The Great Collapse",
-      "description": "Make all three opponents drop below 20% Influence."
+      "description": "Make all three opponents drop below 20 Influence.",
+      "resources": { 
+        "influence" : 20
+      }
     },
     {
       "id": "goal_005",
+      "type" : "achieve" ,
       "title": "The Vault Keeper",
-      "description": "Accumulate over 90% Money (through trades and votes combined)."
+      "description": "Accumulate over 90 Money.",
+      "resources" : {
+        "money" : 90
+      }
     },
     {
       "id": "goal_006",
-      "title": "The Ghost Strategist",
-      "description": "Win the game by winning 2 joker cards."
+      "type" : "all_count" ,
+      "title": "The Great Collapse",
+      "description": "Make all three opponents drop below 20 Money.",
+      "resources": { 
+        "money" : 20
+      }
     },
     {
       "id": "goal_007",
-      "title": "Public Favorite",
-      "description": "Receive a majority Yes vote from the group at least five times in the game."
+      "type" : "count_opp",
+      "title": "Double Agent",
+      "description": "Win the game if the player on your right falls below 20 people.",
+      "resources": { 
+        "people" : 20
+      }
     },
     {
       "id": "goal_008",
+      "type" : "count_opp",
       "title": "Double Agent",
-      "description": "Win the game if the player on your left falls below 30% money and player on right above 70%."
+      "description": "Win the game if the player on your left falls below 20 money.",
+      "resources": { 
+        "money" : 20
+      }
     },
-    {
-      "id": "goal_009",
-      "title": "Silent Saboteur",
-      "description": "Cause 100% combined loss of influence when your turn to trade."
-    },
-    {
-      "id": "goal_010",
-      "title": "Underdog Victory",
-      "description": "Win by achieving a total difference of 80% between money and influence."
-    },
-    {
-        "id": "goal_011",
-        "title": "Silent Monarch",
-        "description": "End the game with 100% People and have the lowest Money among all players."
-      },
       {
-        "id": "goal_012",
-        "title": "The Influencer",
-        "description": "Convince all players to vote No at least twice on your trades during the game."
-      },
-      {
-        "id": "goal_013",
+        "id": "goal_009",
+        "type" : "rounds" ,
         "title": "Protector of the Masses",
-        "description": "Reach 95% People by round 6 without losing consecutive 20% yourself throughout the game."
+        "description": "Reach 95 Money by round 6.",
+        "resources" : {
+          "money" : 95
+        },
+        "rounds" : 6
       },
       {
-        "id": "goal_014",
-        "title": "Collapse Architect",
-        "description": "Make two players fall below 25% People by the end of round 8."
-      },
-      {
-        "id": "goal_015",
+        "id": "goal_010",
+        "type" : "achieve" ,
         "title": "Money Mogul",
-        "description": "Finish with more than 95% Money while Influence is below 40%."
+        "description": "Finish with more than 80 Money while Influence is above 40%." ,
+        "resources" : {
+          "money" : 80 ,
+          "influence" : 40
+        }
       },
       {
-        "id": "goal_016",
-        "title": "Joker Master",
-        "description": "Activate 2 Joker cards and gain a net positive from all of them."
-      },
-      {
-        "id": "goal_017",
-        "title": "Crowd Charmer",
-        "description": "Earn unanimous Yes votes (3/3) on two separate trade turns."
-      },
-      {
-        "id": "goal_018",
-        "title": "Flipping the Scales",
-        "description": "End the game with more than 70% Influence and ensure the player across from you has less than 30% People."
-      },
-      {
-        "id": "goal_019",
-        "title": "Saboteur Supreme",
-        "description": "Cause a total of 80% Influence loss across all players by round 6."
+        "id": "goal_011",
+        "type" : "achieve" ,
+        "title": "Money Mogul",
+        "description": "Finish with more than 80 People while Influence is above 40." ,
+        "resources" : {
+          "people" : 80 ,
+          "influence" : 40
+        }
       }
   ]
