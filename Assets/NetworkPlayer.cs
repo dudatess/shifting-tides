@@ -1,61 +1,97 @@
 using UnityEngine;
-using Unity.Netcode; // Ou Mirror se for o Mirror
+using Unity.Netcode;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; 
 
 public class NetworkPlayer : NetworkBehaviour
 {
-    [SerializeField] private GameObject characterPrefab; // Prefab que será instanciado
-    private static int playerCount = 0; // Para contar quantos jogadores já conectaram
-    private Character character; // Personagem do jogador
-    private SpriteRenderer spriteRenderer; // Sprite do personagem
+    [SerializeField] private GameObject characterPrefab; // Prefab to be instantiated
+    private NetworkVariable<int> playerIndex = new NetworkVariable<int>(); // Synced across network
+    private Character character; // Player's character data
+    private SpriteRenderer spriteRenderer; // Character's sprite renderer
 
-    void Start()
+    //Static positions for 4 players in waiting area ?
+    private readonly Vector3[] waitingRoomSlots = new Vector3[]
     {
-        if (IsOwner) // Só o jogador local (quem se conectou) vai fazer isso
+        new Vector3(-3f, 0, 0), // Player 1 slot
+        new Vector3(-1f, 0, 0), // Player 2 slot
+        new Vector3(1f, 0, 0),  // Player 3 slot
+        new Vector3(3f, 0, 0)    // Player 4 slot
+    };
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
         {
-            AssignCharacter(); // Atribui um personagem aleatório
-            SetPosition(); // Posiciona o personagem na tela
+            // Server assigns unique index to each player
+            if (IsServer)
+            {
+                playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
+            }
+            
+            AssignCharacter();
+            SetPosition();
+
+            //Auto-start game when 4 players connect (server only)
+            if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
+            {
+                Debug.Log("All players ready! Starting game...");
+                StartGame();
+            }
         }
     }
 
-    // Função que atribui um personagem aleatório para o jogador
+    // Assigns random character to player
     private void AssignCharacter()
     {
         int randomIndex = CharacterManager.Instance.GetRandomCharacterIndex();
         character = CharacterManager.Instance.GetCharacter(randomIndex);
         
-        // Instancia o personagem (sprite) no jogo
+        // Instantiates character sprite
         GameObject characterObject = Instantiate(characterPrefab, transform.position, Quaternion.identity);
         spriteRenderer = characterObject.GetComponent<SpriteRenderer>();
         
-        // Atribui o sprite neutro inicialmente
+        // Applies neutral sprite initially
         spriteRenderer.sprite = character.neutral;
     }
 
-    // Posiciona os jogadores na tela, da esquerda para a direita
+    // Positions players side-by-side in waiting area
     private void SetPosition()
     {
-        // A posição X será determinada pelo número de jogadores conectados
-        float posX = playerCount * 2.0f; // 2 unidades de distância entre jogadores (ajuste conforme necessário)
-        transform.position = new Vector3(posX, 0, 0); // Y = 0, Z = 0 para 2D
-
-        playerCount++; // Incrementa o contador de jogadores
+        //Uses predefined slots instead of dynamic calculation
+        if (playerIndex.Value < waitingRoomSlots.Length)
+        {
+            transform.position = waitingRoomSlots[playerIndex.Value];
+        }
     }
 
-    // Se o jogador mudar a expressão (por exemplo, sorrir ou ficar bravo)
+    // Changes character expression (smile/angry/neutral)
     public void ChangeExpression(string mood)
     {
-        if (mood == "smile")
+        if (!IsOwner) return; // Only owner can change expressions
+
+        switch (mood)
         {
-            spriteRenderer.sprite = character.smiling;
+            case "smile":
+                spriteRenderer.sprite = character.smiling;
+                break;
+            case "angry":
+                spriteRenderer.sprite = character.angry;
+                break;
+            default:
+                spriteRenderer.sprite = character.neutral;
+                break;
         }
-        else if (mood == "angry")
+    }
+
+    // Transitions to game 
+    private void StartGame()
+    {
+        if (IsServer)
         {
-            spriteRenderer.sprite = character.angry;
-        }
-        else
-        {
-            spriteRenderer.sprite = character.neutral;
+            //Load new scene 
+            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+            
         }
     }
 }
