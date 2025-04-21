@@ -1,74 +1,122 @@
 using UnityEngine;
 using Unity.Netcode;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 
 public class NetworkPlayer : NetworkBehaviour
 {
-    [SerializeField] private GameObject characterPrefab; // Prefab to be instantiated
-    private NetworkVariable<int> playerIndex = new NetworkVariable<int>(); // Synced across network
-    private Character character; // Player's character data
-    private SpriteRenderer spriteRenderer; // Character's sprite renderer
+    [SerializeField] private GameObject characterPrefab; // Prefab visual do personagem
+    private NetworkVariable<int> playerIndex = new NetworkVariable<int>();
+    private NetworkVariable<int> characterIndex = new NetworkVariable<int>(
+        default,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
 
-    //Static positions for 4 players in waiting area ?
+    private Character character;
+    private SpriteRenderer spriteRenderer;
+
     private readonly Vector3[] waitingRoomSlots = new Vector3[]
     {
-        new Vector3(-3f, 0, 0), // Player 1 slot
-        new Vector3(-1f, 0, 0), // Player 2 slot
-        new Vector3(1f, 0, 0),  // Player 3 slot
-        new Vector3(3f, 0, 0)    // Player 4 slot
+        new Vector3(-3f, 0, 0),
+        new Vector3(-1f, 0, 0),
+        new Vector3(1f, 0, 0),
+        new Vector3(3f, 0, 0)
     };
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner)
+        if (IsServer && IsOwner)
         {
-            // Server assigns unique index to each player
-            if (IsServer)
-            {
-                playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
-            }
-            
+            playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
             AssignCharacter();
-            SetPosition();
+        }
 
-            //Auto-start game when 4 players connect (server only)
-            if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
-            {
-                Debug.Log("All players ready! Starting game...");
-                StartGame();
-            }
+        if (IsClient)
+        {
+            SetPosition();
+            CreateCharacterVisual();
+        }
+
+        if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
+        {
+            Debug.Log("All players ready! Starting game...");
+            StartGame();
+        }
+
+        characterIndex.OnValueChanged += OnCharacterIndexChanged;
+    }
+
+    private void AssignCharacter()
+    {
+        if (!IsServer) return;
+
+        Debug.Log("AssignCharacter começou");
+
+        int randomIndex = CharacterManager.Instance.GetRandomCharacterIndex();
+        characterIndex.Value = randomIndex;
+        character = CharacterManager.Instance.GetCharacter(randomIndex);
+
+        if (character == null)
+        {
+            Debug.LogError("Character é null! Verifique o CharacterManager.");
+            return;
+        }
+
+        Debug.Log("Loaded character: " + character.characterName);
+        Debug.Log("Assigned neutral sprite: " + character.neutral?.name);
+
+        GameObject characterObject = Instantiate(characterPrefab, waitingRoomSlots[playerIndex.Value], Quaternion.identity);
+
+        NetworkObject netObj = characterObject.GetComponent<NetworkObject>();
+        if (netObj == null)
+        {
+            Debug.LogError("Prefab instanciado não tem NetworkObject!");
+            return;
+        }
+        netObj.Spawn(true);
+
+        SpriteRenderer sr = characterObject.GetComponent<SpriteRenderer>();
+        sr.sprite = character.neutral;
+
+        Debug.Log("Sprite aplicado com sucesso: " + sr.sprite?.name);
+    }
+
+    private void CreateCharacterVisual()
+    {
+        character = CharacterManager.Instance.GetCharacter(characterIndex.Value);
+
+        if (character == null)
+        {
+            Debug.LogError("Cliente não conseguiu carregar o personagem com índice: " + characterIndex.Value);
+            return;
+        }
+
+        GameObject characterObject = Instantiate(characterPrefab, waitingRoomSlots[playerIndex.Value], Quaternion.identity);
+        SpriteRenderer sr = characterObject.GetComponent<SpriteRenderer>();
+        sr.sprite = character.neutral;
+
+        Debug.Log("Cliente aplicou sprite: " + sr.sprite?.name);
+    }
+
+    private void OnCharacterIndexChanged(int oldIndex, int newIndex)
+    {
+        Debug.Log("Character index updated! Criando personagem visual no cliente.");
+        if (IsClient)
+        {
+            CreateCharacterVisual();
         }
     }
 
-    // Assigns random character to player
-    private void AssignCharacter()
-    {
-        int randomIndex = CharacterManager.Instance.GetRandomCharacterIndex();
-        character = CharacterManager.Instance.GetCharacter(randomIndex);
-        
-        // Instantiates character sprite
-        GameObject characterObject = Instantiate(characterPrefab, transform.position, Quaternion.identity);
-        spriteRenderer = characterObject.GetComponent<SpriteRenderer>();
-        
-        // Applies neutral sprite initially
-        spriteRenderer.sprite = character.neutral;
-    }
-
-    // Positions players side-by-side in waiting area
     private void SetPosition()
     {
-        //Uses predefined slots instead of dynamic calculation
         if (playerIndex.Value < waitingRoomSlots.Length)
         {
             transform.position = waitingRoomSlots[playerIndex.Value];
         }
     }
 
-    // Changes character expression (smile/angry/neutral)
     public void ChangeExpression(string mood)
     {
-        if (!IsOwner) return; // Only owner can change expressions
+        if (!IsOwner) return;
 
         switch (mood)
         {
@@ -84,14 +132,11 @@ public class NetworkPlayer : NetworkBehaviour
         }
     }
 
-    // Transitions to game 
     private void StartGame()
     {
         if (IsServer)
         {
-            //Load new scene 
             NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-            
         }
     }
 }
