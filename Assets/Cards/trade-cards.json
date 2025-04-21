@@ -83,17 +83,17 @@
         "id": "trade_011",
         "type": "normal",
         "title": "Charity Campaign",
-        "description": "Lose 10 Money to gain 15 People." ,
-        "effect": { 
-        "others" : {
-          "people" : 15 ,
-          "money" : -10
-        }, 
-        "self" : {
-          "money" : -10 ,
-          "people" : 15
+        "description": "Lose 10 Money to gain 15 People.",
+        "effect": {
+          "others": {
+            "people": 15,
+            "money": -10
+          },
+          "self": {
+            "money": -10,
+            "people": 15
           }
-       }
+        }
       },
       {
         "id": "trade_012",
