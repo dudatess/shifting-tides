@@ -27,11 +27,14 @@ public class NetworkPlayer : NetworkBehaviour
         if (IsServer && IsOwner)
         {
             playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
+            Debug.Log("Player index: " + playerIndex.Value);
             AssignCharacter();
         }
 
         if (IsClient)
         {
+            playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
+            Debug.Log("Player index: " + playerIndex.Value);
             SetPosition();
             CreateCharacterVisual();
         }
