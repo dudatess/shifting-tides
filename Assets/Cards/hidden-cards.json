@@ -1,6 +1,6 @@
 [
     {
-        "id": "trade_009",
+        "id": "trade_001",
         "type": "yesVotes",
         "title": "The Bribe",
         "description": "If exactly 1 player votes Yes, you gain 20 Influence. They lose 20 Money.",
@@ -18,7 +18,43 @@
         }
     },
     {
-        "id": "trade_008",
+        "id": "trade_011",
+        "type": "yesVotes",
+        "title": "The Bribe",
+        "description": "If exactly 1 player votes Yes, you gain 20 Money. They lose 20 People.",
+        "effect": { 
+            "others" : {
+                "people" : -20
+            }, 
+            "self" : {
+                "money" : 20
+            }
+        },
+        "votes" : { 
+            "type" : "yes" ,
+            "count": 1 
+        }
+    },
+    {
+        "id": "trade_006",
+        "type": "yesVotes",
+        "title": "The Bribe",
+        "description": "If exactly 1 player votes Yes, you gain 20 Influence. They lose 20 People.",
+        "effect": { 
+            "others" : {
+                "people" : -20
+            }, 
+            "self" : {
+                "influence" : 20
+            }
+        },
+        "votes" : { 
+            "type" : "yes" ,
+            "count": 1 
+        }
+    },
+    {
+        "id": "trade_002",
         "type": "noVotes",
         "title": "The Great Betrayal",
         "description": "If all players vote No, they each lose 10 Money, and you receive 30 Influence." ,
@@ -36,7 +72,43 @@
         }
     },
     {
+        "id": "trade_007",
+        "type": "noVotes",
+        "title": "The Great Betrayal",
+        "description": "If all players vote No, they each lose 10 People, and you receive 30 Influence." ,
+        "effect": { 
+            "others" : {
+                "people" : -10
+            }, 
+            "self" : {
+                "influence" : 30
+            }
+        },
+        "votes" : {
+            "type" : "no" ,
+            "count" : 3
+        }
+    },
+    {
         "id": "trade_008",
+        "type": "yesVotes",
+        "title": "The Great Betrayal",
+        "description": "If all players vote No, they each lose 10 People, and you receive 30 Influence." ,
+        "effect": { 
+            "others" : {
+                "people" : -10
+            }, 
+            "self" : {
+                "influence" : 30
+            }
+        },
+        "votes" : {
+            "type" : "yes" ,
+            "count" : 3
+        }
+    },
+    {
+        "id": "trade_003",
         "type": "noVotes",
         "title": "The Great Betrayal",
         "description": "If all players vote No, they each lose 10 Money, and you receive their total funds." ,
@@ -54,7 +126,7 @@
         }
     },
     {
-        "id": "trade_018",
+        "id": "trade_009",
         "type": "yesVotes",
         "title": "Power Surge",
         "description": "If even one player votes Yes, gain 25 Influence. All Yes voters lose 10 People." ,
@@ -72,7 +144,43 @@
         }
       },
       {
-        "id": "trade_020",
+        "id": "trade_010",
+        "type": "yesVotes",
+        "title": "Money Surge",
+        "description": "If even one player votes Yes, gain 25 Money. All Yes voters lose 10 People." ,
+        "effect": { 
+            "others" : {
+                "people" : -10
+            }, 
+            "self" : {
+                "money" : 25
+            }
+        },
+        "votes" : {
+            "type" : "yes" ,
+            "count" : 1
+        }
+      },
+      {
+        "id": "trade_004",
+        "type": "noVotes",
+        "title": "Crowd Surge",
+        "description": "If even one player votes No, gain 25 People. All Yes voters lose 10 Money." ,
+        "effect": { 
+            "others" : {
+                "money" : -10
+            }, 
+            "self" : {
+                "people" : 25
+            }
+        },
+        "votes" : {
+            "type" : "no" ,
+            "count" : 1
+        }
+      },
+      {
+        "id": "trade_005",
         "type": "yesVotes",
         "title": "Blood Pact",
         "description": "If 2 players vote Yes, they each gain 10 people, and you gain 20 influence." ,
@@ -90,7 +198,7 @@
         }
       },
       {
-        "id": "trade_018",
+        "id": "trade_012",
         "type": "yesVotes",
         "title": "Power Surge",
         "description": "If even one player votes Yes, gain 25 Influence. All Yes voters lose 10 People.",
