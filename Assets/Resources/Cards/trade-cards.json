@@ -1,6 +1,6 @@
 [
     {
-        "id": "trade_001",
+        "id": 1,
         "type": "normal",
         "title": "Political Favor",
         "description": "For every player that offers 10 people they get 15 of influence." ,
@@ -16,7 +16,7 @@
         }
     },
     {
-        "id": "trade_002",
+        "id": 2,
         "type": "normal",
         "title": "Fund the Movement",
         "description": "Lose 10 Money, gain 15 People." ,
@@ -32,7 +32,7 @@
       }
     },
     {
-        "id": "trade_003",
+        "id": 3,
         "type": "normal",
         "title": "Resource Swap",
         "description": "Offer to trade 10 Influence for 10 Money from any player who accepts." ,
@@ -48,7 +48,7 @@
       }
     },
     {
-      "id": "trade_003",
+      "id": 4,
       "type": "normal",
       "title": "Resource Swap",
       "description": "Offer to trade 10 people for 10 Money from any player who accepts." ,
@@ -64,7 +64,7 @@
        }
     },
     {
-      "id": "trade_003",
+      "id": 5,
       "type": "normal",
       "title": "Resource Swap",
       "description": "Offer to trade 10 people for 10 influence from any player who accepts." ,
@@ -80,7 +80,7 @@
        }
       },
       {
-        "id": "trade_011",
+        "id": 6,
         "type": "normal",
         "title": "Charity Campaign",
         "description": "Lose 10 Money to gain 15 People.",
@@ -96,7 +96,7 @@
         }
       },
       {
-        "id": "trade_012",
+        "id": 7,
         "type": "normal",
         "title": "Influencer Partnership",
         "description": "Trade 15 People to gain 10 Influence.", 

@@ -14,6 +14,14 @@ public class NetworkPlayer : NetworkBehaviour
     private Character character;
     private SpriteRenderer spriteRenderer;
 
+    private int money = 0;
+
+    private int influence = 50;
+
+    private int people = 0;
+
+    public int goalIndex;
+
     private readonly Vector3[] waitingRoomSlots = new Vector3[]
     {
         new Vector3(-3f, 0, 0),
@@ -29,6 +37,7 @@ public class NetworkPlayer : NetworkBehaviour
             playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
             Debug.Log("Player index: " + playerIndex.Value);
             AssignCharacter();
+            AssignGoal();
         }
 
         if (IsClient)
@@ -37,6 +46,7 @@ public class NetworkPlayer : NetworkBehaviour
             Debug.Log("Player index: " + playerIndex.Value);
             SetPosition();
             CreateCharacterVisual();
+            AssignGoal();
         }
 
         if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
@@ -141,5 +151,11 @@ public class NetworkPlayer : NetworkBehaviour
         {
             NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         }
+    }
+
+    private void AssignGoal()
+    {
+        int randomIndex = GoalManager.Instance.GetRandomGoalIndex();
+        Goal g = GoalManager.Instance.GetGoal(randomIndex);
     }
 }

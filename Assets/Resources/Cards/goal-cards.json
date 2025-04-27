@@ -1,16 +1,16 @@
 [
     {
-      "id": "goal_001",
+      "id": 1,
       "type" : "achieve",
       "title": "Shadow Ruler",
-      "description": "End the game by achieving 100 Influence and at least 60 of People.",
+      "description": "End the game by achieving 100 Influence and 60 of People.",
       "resources": { 
         "people" : 60,
         "influence" : 100
       }
     },
     {
-      "id": "goal_002",
+      "id": 2,
       "type" : "rounds" , 
       "title": "Civilian Hero",
       "description": "Achieve a state of 90 money by the end of 6th round." ,
@@ -20,7 +20,7 @@
         "rounds" : 6
     },
     {
-      "id": "goal_003",
+      "id": 3,
       "type" : "rounds" , 
       "title": "Civilian Hero",
       "description": "Achieve a state of 90 people by the end of 6th round." ,
@@ -30,7 +30,7 @@
         "rounds" : 6
     },
     {
-      "id": "goal_004",
+      "id": 4,
       "type" : "all_count" ,
       "title": "The Great Collapse",
       "description": "Make all three opponents drop below 20 Influence.",
@@ -39,7 +39,7 @@
       }
     },
     {
-      "id": "goal_005",
+      "id": 5,
       "type" : "achieve" ,
       "title": "The Vault Keeper",
       "description": "Accumulate over 90 Money.",
@@ -48,7 +48,7 @@
       }
     },
     {
-      "id": "goal_006",
+      "id": 6,
       "type" : "all_count" ,
       "title": "The Great Collapse",
       "description": "Make all three opponents drop below 20 Money.",
@@ -56,26 +56,8 @@
         "money" : 20
       }
     },
-    {
-      "id": "goal_007",
-      "type" : "count_opp",
-      "title": "Double Agent",
-      "description": "Win the game if the player on your right falls below 20 people.",
-      "resources": { 
-        "people" : 20
-      }
-    },
-    {
-      "id": "goal_008",
-      "type" : "count_opp",
-      "title": "Double Agent",
-      "description": "Win the game if the player on your left falls below 20 money.",
-      "resources": { 
-        "money" : 20
-      }
-    },
       {
-        "id": "goal_009",
+        "id": 7,
         "type" : "rounds" ,
         "title": "Protector of the Masses",
         "description": "Reach 95 Money by round 6.",
@@ -85,7 +67,7 @@
         "rounds" : 6
       },
       {
-        "id": "goal_010",
+        "id": 8,
         "type" : "achieve" ,
         "title": "Money Mogul",
         "description": "Finish with more than 80 Money while Influence is above 40%." ,
@@ -95,7 +77,7 @@
         }
       },
       {
-        "id": "goal_011",
+        "id": 9,
         "type" : "achieve" ,
         "title": "Money Mogul",
         "description": "Finish with more than 80 People while Influence is above 40." ,
