@@ -23,9 +23,9 @@ public class TradeManager : MonoBehaviour
          TextAsset jsonFileTrades = Resources.Load<TextAsset>("./Cards/trade-cards");
         TextAsset jsonFileHidden = Resources.Load<TextAsset>("./Cards/hidden-cards");
         if (jsonFileTrades != null && jsonFileHidden != null)
-        {0
+        {
             trades = JsonHelper.FromJson<Trade>(jsonFileTrades.text);
-            hiddens = JsonHelper.FromJson<Hidden>(jsonFileHidden);
+            hiddens = JsonHelper.FromJson<Hidden>(jsonFileHidden.text);
             foreach (var trade in trades)
             {
                 Debug.Log("Nome: " + trade.title);
@@ -36,11 +36,11 @@ public class TradeManager : MonoBehaviour
             Debug.LogError("Arquivo JSON não encontrado!");
         }
     }
-     public Goal GetTrade(int index)
+     public Trade GetTrade(int index)
 {
     return (index >= 0 && index < trades.Length) ? trades[index] : null;
 }
-    public Goal GetHidden(int index)
+    public Hidden GetHidden(int index)
     {
         return (index >= 0 && index < hiddens.Length) ? hiddens[index] : null;
     }

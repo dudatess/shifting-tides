@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using TMPro;
+using Unity.Netcode; 
 public class TradeDisplay : MonoBehaviour
 {
     [SerializeField] private GameObject tradeCardObject; // O GameObject da carta de trade
