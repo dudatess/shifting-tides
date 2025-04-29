@@ -1,28 +1,26 @@
 using UnityEngine;
 
 [System.Serializable]
-public class Goal : ScriptableObject
+public class Goal
 {
     [System.Serializable]
     public class Resources
     {
-        public int? money;
-        public int? influence;
-        public int? people;
+        public int money = 0;  
+        public int influence = 0;
+        public int people = 0;
     }
 
-    [System.Serializable]
-    public class Requirements
-    {
-        public Resources resources;
-        public int? rounds;
-        public string target;
-    }
-
+    // Required fields (must exist in JSON)
     public int id;
     public string type;
     public string title;
     public string description;
-    public Requirements requirements;
-    public bool used = false;
+
+    // Optional fields (with default values)
+    public Resources resources = new Resources();
+    public int rounds = -1; 
+
+    [System.NonSerialized] 
+    public bool used = false; 
 }
