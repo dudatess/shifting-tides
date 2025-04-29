@@ -30,6 +30,12 @@ public class NetworkPlayer : NetworkBehaviour
         new Vector3(3f, 0, 0)
     };
 
+     //Variable to check if the game is ready
+    private NetworkVariable<bool> isGameReady = new NetworkVariable<bool>(
+        false, 
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
     public override void OnNetworkSpawn()
     {
         if (IsServer && IsOwner)
@@ -49,14 +55,48 @@ public class NetworkPlayer : NetworkBehaviour
             AssignGoal();
         }
 
-        if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
+        if (IsServer)
         {
-            Debug.Log("All players ready! Starting game...");
-            StartGame();
+            // Uptade the state when news players join
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         }
+
+        // See changes in the game state
+        isGameReady.OnValueChanged += OnGameReadyChanged;
 
         characterIndex.OnValueChanged += OnCharacterIndexChanged;
     }
+
+    private void OnClientConnected(ulong clientId)
+{
+    Debug.Log($"Cliente conectado: {clientId} (Total: {NetworkManager.Singleton.ConnectedClients.Count})");
+
+    if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
+    {
+        Debug.Log("4 jogadores conectados! Ativando isGameReady...");
+        isGameReady.Value = true;
+    }
+}
+
+    public void OnGameReadyChanged(bool oldValue, bool newValue)
+{
+    Debug.Log($"[NetworkPlayer] OnGameReadyChanged: {newValue} (IsOwner: {IsOwner}, IsServer: {IsServer})");
+
+    if (newValue && IsOwner && IsServer)
+    {
+        // Busca o LobbyUI dinamicamente (caso não esteja atribuído no Inspector)
+        var lobbyUI = FindObjectOfType<LobbyUI>();
+        if (lobbyUI != null)
+        {
+            Debug.Log("Notificando LobbyUI para mostrar o botão...");
+            lobbyUI.ShowStartButton();
+        }
+        else
+        {
+            Debug.LogError("LobbyUI não encontrado na cena!");
+        }
+    }
+}
 
     private void AssignCharacter()
     {
@@ -145,16 +185,21 @@ public class NetworkPlayer : NetworkBehaviour
         }
     }
 
-    private void StartGame()
+   /* private void StartGame()
     {
         if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         }
-    }
+    }*/
 
     private void AssignGoal()
     {
+        if (GoalManager.Instance == null)
+        {
+            Debug.LogWarning("GoalManager não encontrado. Ignorando atribuição de objetivo.");
+            return;
+        }
         int randomIndex = GoalManager.Instance.GetRandomGoalIndex();
         Goal g = GoalManager.Instance.GetGoal(randomIndex);
     }
