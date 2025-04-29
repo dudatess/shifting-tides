@@ -3,25 +3,24 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Trade", menuName = "Scriptable Objects/Trade")]
 public class Trade : ScriptableObject
 {
-        public class EffectData
+    [System.Serializable]
+    public class EffectData
     {
-        public TargetEffect others;
         public TargetEffect self;
+        public TargetEffect others;
     }
+
+    [System.Serializable]
     public class TargetEffect
     {
-        public int people;
-        public int influence;
-
-        public int money;
+        public int? money;
+        public int? people;
+        public int? influence;
     }
 
     public int id;
     public string type;
-
     public string title;
     public string description;
-    
     public EffectData effect;
-    
 }

@@ -20,8 +20,8 @@ public class TradeManager : MonoBehaviour
 
      void Start()
     {
-         TextAsset jsonFileTrades = Resources.Load<TextAsset>("./Cards/trade-cards");
-        TextAsset jsonFileHidden = Resources.Load<TextAsset>("./Cards/hidden-cards");
+         TextAsset jsonFileTrades = Resources.Load<TextAsset>("Cards/trade-cards");
+        TextAsset jsonFileHidden = Resources.Load<TextAsset>("Cards/hidden-cards");
         if (jsonFileTrades != null && jsonFileHidden != null)
         {
             trades = JsonHelper.FromJson<Trade>(jsonFileTrades.text);
