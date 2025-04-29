@@ -9,7 +9,8 @@
         "people": 60,
         "influence": 100
       },
-      "rounds": 0
+      "rounds": 0,
+      "target": "self"
     },
     {
       "id": 2,
@@ -21,7 +22,8 @@
         "people": 0,
         "influence": 0
       },
-      "rounds": 6
+      "rounds": 6,
+      "target": "self"
     },
     {
       "id": 3,
@@ -33,7 +35,8 @@
         "people": 90,
         "influence": 0
       },
-      "rounds": 6
+      "rounds": 6,
+      "target": "self"
     },
     {
       "id": 4,
@@ -45,7 +48,8 @@
         "people": 0,
         "influence": 20
       },
-      "rounds": 0
+      "rounds": 0,
+      "target": "opponents"
     },
     {
       "id": 5,
@@ -57,7 +61,8 @@
         "people": 0,
         "influence": 0
       },
-      "rounds": 0
+      "rounds": 0,
+      "target": "self"
     },
     {
       "id": 6,
@@ -69,7 +74,8 @@
         "people": 0,
         "influence": 0
       },
-      "rounds": 0
+      "rounds": 0,
+      "target": "opponents"
     },
     {
       "id": 7,
@@ -81,7 +87,8 @@
         "people": 0,
         "influence": 0
       },
-      "rounds": 6
+      "rounds": 6,
+      "target": "self"
     },
     {
       "id": 8,
@@ -93,7 +100,8 @@
         "people": 0,
         "influence": 40
       },
-      "rounds": 0
+      "rounds": 0,
+      "target": "self"
     },
     {
       "id": 9,
@@ -105,6 +113,7 @@
         "people": 80,
         "influence": 40
       },
-      "rounds": 0
+      "rounds": 0,
+      "target": "self"
     }
 ]
