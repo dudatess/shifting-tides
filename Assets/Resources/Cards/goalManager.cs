@@ -17,13 +17,14 @@ public class GoalManager : MonoBehaviour
         else Destroy(gameObject);
     }
     void Start()
-    {
-         TextAsset jsonFile = Resources.Load<TextAsset>("./Cards/goal-cards");
+{
+        TextAsset jsonFile = Resources.Load<TextAsset>("Cards/goal-cards"); 
 
         if (jsonFile != null)
         {
-            goals = JsonHelper.FromJson<Goal>(jsonFile.text);
-            
+            GoalList goalList = JsonUtility.FromJson<GoalList>(jsonFile.text);
+            goals = goalList.goals;
+
             foreach (var goal in goals)
             {
                 Debug.Log("Nome: " + goal.title);
@@ -33,7 +34,8 @@ public class GoalManager : MonoBehaviour
         {
             Debug.LogError("Arquivo JSON não encontrado!");
         }
-    }
+}
+
 
      public Goal GetGoal(int index)
 {
