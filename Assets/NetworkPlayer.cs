@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class NetworkPlayer : NetworkBehaviour
 {
-    [SerializeField] private GameObject characterPrefab; // Prefab visual do personagem
+    [SerializeField] private GameObject characterPrefab; 
     private NetworkVariable<int> playerIndex = new NetworkVariable<int>();
     private NetworkVariable<int> characterIndex = new NetworkVariable<int>(
         default,
@@ -14,14 +14,13 @@ public class NetworkPlayer : NetworkBehaviour
     private Character character;
     private SpriteRenderer spriteRenderer;
 
+    // Player stats
     private int money = 0;
-
     private int influence = 50;
-
     private int people = 0;
-
     public int goalIndex;
 
+    // Waiting room positions
     private readonly Vector3[] waitingRoomSlots = new Vector3[]
     {
         new Vector3(-3f, 0, 0),
@@ -30,129 +29,130 @@ public class NetworkPlayer : NetworkBehaviour
         new Vector3(3f, 0, 0)
     };
 
-     //Variable to check if the game is ready
+    // Game state tracking
     private NetworkVariable<bool> isGameReady = new NetworkVariable<bool>(
         false, 
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
+    private bool goalAssigned = false;
+
+    private void Update()
+    {
+        // Assign goal once when conditions are met
+        if (!goalAssigned && IsOwner && GoalManager.Instance != null && GoalManager.Instance.AreGoalsLoaded())
+        {
+            AssignGoal();
+            goalAssigned = true;
+        }
+    }
 
     public override void OnNetworkSpawn()
     {
+        // Server initialization
         if (IsServer && IsOwner)
         {
             playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
-            Debug.Log("Player index: " + playerIndex.Value);
             AssignCharacter();
-            AssignGoal();
         }
 
+        // Client initialization
         if (IsClient)
         {
             playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
-            Debug.Log("Player index: " + playerIndex.Value);
+            Debug.Log("[NetworkPlayer] Player index: " + playerIndex.Value);
             SetPosition();
             CreateCharacterVisual();
             AssignGoal();
         }
 
+        // Server-side player connection handling
         if (IsServer)
         {
-            // Uptade the state when news players join
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         }
 
-        // See changes in the game state
+        // Event subscriptions
         isGameReady.OnValueChanged += OnGameReadyChanged;
-
         characterIndex.OnValueChanged += OnCharacterIndexChanged;
     }
 
     private void OnClientConnected(ulong clientId)
-{
-    Debug.Log($"Cliente conectado: {clientId} (Total: {NetworkManager.Singleton.ConnectedClients.Count})");
-
-    if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
     {
-        Debug.Log("4 jogadores conectados! Ativando isGameReady...");
-        isGameReady.Value = true;
+        // Start game when 4 players connect
+        if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
+        {
+            isGameReady.Value = true;
+        }
     }
-}
 
     public void OnGameReadyChanged(bool oldValue, bool newValue)
-{
-    Debug.Log($"[NetworkPlayer] OnGameReadyChanged: {newValue} (IsOwner: {IsOwner}, IsServer: {IsServer})");
-
-    if (newValue && IsOwner && IsServer)
     {
-        // Busca o LobbyUI dinamicamente (caso não esteja atribuído no Inspector)
-        var lobbyUI = FindObjectOfType<LobbyUI>();
-        if (lobbyUI != null)
+        // Show start button when game is ready
+        if (newValue && IsOwner && IsServer)
         {
-            Debug.Log("Notificando LobbyUI para mostrar o botão...");
-            lobbyUI.ShowStartButton();
-        }
-        else
-        {
-            Debug.LogError("LobbyUI não encontrado na cena!");
+            var lobbyUI = Object.FindFirstObjectByType<LobbyUI>();
+            if (lobbyUI != null)
+            {
+                lobbyUI.ShowStartButton();
+            }
         }
     }
-}
 
     private void AssignCharacter()
     {
         if (!IsServer) return;
 
-        Debug.Log("AssignCharacter começou");
-
+        // Random character assignment
         int randomIndex = CharacterManager.Instance.GetRandomCharacterIndex();
         characterIndex.Value = randomIndex;
         character = CharacterManager.Instance.GetCharacter(randomIndex);
 
         if (character == null)
         {
-            Debug.LogError("Character é null! Verifique o CharacterManager.");
+            Debug.LogError("[NetworkPlayer] Character is null! Check CharacterManager.");
             return;
         }
 
-        Debug.Log("Loaded character: " + character.characterName);
-        Debug.Log("Assigned neutral sprite: " + character.neutral?.name);
-
+        Debug.Log("[NetworkPlayer] Loaded character: " + character.characterName);
+        
+        // Instantiate character prefab
         GameObject characterObject = Instantiate(characterPrefab, waitingRoomSlots[playerIndex.Value], Quaternion.identity);
-
         NetworkObject netObj = characterObject.GetComponent<NetworkObject>();
+        
         if (netObj == null)
         {
-            Debug.LogError("Prefab instanciado não tem NetworkObject!");
+            Debug.LogError("[NetworkPlayer] Instantiated prefab missing NetworkObject!");
             return;
         }
+        
         netObj.Spawn(true);
-
+        
+        // Set character sprite
         SpriteRenderer sr = characterObject.GetComponent<SpriteRenderer>();
         sr.sprite = character.neutral;
-
-        Debug.Log("Sprite aplicado com sucesso: " + sr.sprite?.name);
+        Debug.Log("[NetworkPlayer] Sprite applied: " + sr.sprite?.name);
     }
 
     private void CreateCharacterVisual()
     {
+        // Client-side character visualization
         character = CharacterManager.Instance.GetCharacter(characterIndex.Value);
 
         if (character == null)
         {
-            Debug.LogError("Cliente não conseguiu carregar o personagem com índice: " + characterIndex.Value);
+            Debug.LogError($"[NetworkPlayer] Failed to load character with index: {characterIndex.Value}");
             return;
         }
 
         GameObject characterObject = Instantiate(characterPrefab, waitingRoomSlots[playerIndex.Value], Quaternion.identity);
         SpriteRenderer sr = characterObject.GetComponent<SpriteRenderer>();
         sr.sprite = character.neutral;
-
-        Debug.Log("Cliente aplicou sprite: " + sr.sprite?.name);
+        Debug.Log("[NetworkPlayer] Client applied sprite: " + sr.sprite?.name);
     }
 
     private void OnCharacterIndexChanged(int oldIndex, int newIndex)
     {
-        Debug.Log("Character index updated! Criando personagem visual no cliente.");
+        Debug.Log("[NetworkPlayer] Character index updated! Creating client visual.");
         if (IsClient)
         {
             CreateCharacterVisual();
@@ -161,6 +161,7 @@ public class NetworkPlayer : NetworkBehaviour
 
     private void SetPosition()
     {
+        // Position player in waiting room slot
         if (playerIndex.Value < waitingRoomSlots.Length)
         {
             transform.position = waitingRoomSlots[playerIndex.Value];
@@ -171,6 +172,7 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        // Change character expression based on mood
         switch (mood)
         {
             case "smile":
@@ -185,22 +187,19 @@ public class NetworkPlayer : NetworkBehaviour
         }
     }
 
-   /* private void StartGame()
-    {
-        if (IsServer)
-        {
-            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-        }
-    }*/
-
     private void AssignGoal()
     {
-        if (GoalManager.Instance == null)
+        // Validate goal manager state
+        if (GoalManager.Instance == null || GoalManager.Instance.goals == null || GoalManager.Instance.goals.Length == 0)
         {
-            Debug.LogWarning("GoalManager não encontrado. Ignorando atribuição de objetivo.");
+            Debug.LogWarning("[NetworkPlayer] GoalManager not ready. Will retry.");
             return;
         }
+
+        // Assign random goal
         int randomIndex = GoalManager.Instance.GetRandomGoalIndex();
+        goalIndex = randomIndex;
         Goal g = GoalManager.Instance.GetGoal(randomIndex);
+        Debug.Log($"[NetworkPlayer] Goal assigned: {g.title} - {g.description}");
     }
 }

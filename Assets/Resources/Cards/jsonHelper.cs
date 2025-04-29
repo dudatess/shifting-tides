@@ -1,11 +1,10 @@
 using UnityEngine;
-
 public static class JsonHelper
 {
     public static T[] FromJson<T>(string json)
     {
-        string newJson = "{ \"array\": " + json + "}";
-        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
+        string fixedJson = "{\"array\":" + json + "}";
+        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(fixedJson);
         return wrapper.array;
     }
 
