@@ -1,46 +1,42 @@
 using UnityEngine;
 using TMPro;
-using Unity.Netcode; 
+
 public class TradeDisplay : MonoBehaviour
 {
-    [SerializeField] private GameObject tradeCardObject; // O GameObject da carta de trade
-    [SerializeField] private TextMeshProUGUI tradeTitleText;
-    [SerializeField] private TextMeshProUGUI hiddenTitleText;
+    [SerializeField] private TextMeshProUGUI tradeText; // A caixa de texto para exibir o título
 
     private Trade currentTrade;
     private Hidden currentHidden;
 
-    public void ShowNewTrade()
+    public void Show(string tradeTitle, string hiddenDescription)
     {
         int tradeIndex = TradeManager.Instance.GetRandomTradeIndex();
         int hiddenIndex = TradeManager.Instance.GetRandomHiddenIndex();
 
         // Pega o Trade
         currentTrade = TradeManager.Instance.trades[tradeIndex];
-        
-        // Atualiza o título do trade
-        tradeTitleText.text = currentTrade.title;
 
         // Verifica se tem hidden
         if (hiddenIndex != -1)
         {
+            // Pega a carta hidden
             currentHidden = TradeManager.Instance.hiddens[hiddenIndex];
-            hiddenTitleText.text = currentHidden.title; // Mostra o título da carta escondida
-            hiddenTitleText.gameObject.SetActive(true);
+            
+            // Exibe a concatenação do título do trade com o título da carta hidden
+            tradeText.text = currentTrade.title + " - " + currentHidden.title;
         }
         else
         {
-            currentHidden = null;
-            hiddenTitleText.text = "";
-            hiddenTitleText.gameObject.SetActive(false); // Esconde o campo se não tiver hidden
+            // Apenas exibe o título do trade se não houver carta hidden
+            tradeText.text = currentTrade.title;
         }
 
-        // Mostra o card de trade na tela
-        tradeCardObject.SetActive(true);
+        // Exibe a caixa de texto com a concatenação
+        tradeText.gameObject.SetActive(true);
     }
 
-    public void HideTrade()
+    public void Hide()
     {
-        tradeCardObject.SetActive(false);
+        tradeText.gameObject.SetActive(false); // Esconde a caixa de texto
     }
 }
