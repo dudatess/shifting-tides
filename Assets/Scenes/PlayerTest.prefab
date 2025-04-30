@@ -72,3 +72,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   characterPrefab: {fileID: 752205752989790034, guid: ebd2043701c661d4a9cbcc7d55e7506a, type: 3}
+  goalIndex: 0

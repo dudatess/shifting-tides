@@ -1,2 +1,15 @@
 fileFormatVersion: 2
 guid: 502731287e74e674596713bcc6c4a648
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - backgroundMusic: {fileID: 8300000, guid: 273d80d8f7560a448a8d8cdde4557e1e, type: 3}
+  - gavelHitSound: {fileID: 8300000, guid: 7bc0f139f2f4b574fbcbd489e6b223cb, type: 3}
+  - heartbeatSound: {fileID: 8300000, guid: 816c455ec537d5d43bdfeeff34e2b818, type: 3}
+  - corrIncorrSound: {fileID: 8300000, guid: 382ed60e39342674f973dc695b6670f0, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

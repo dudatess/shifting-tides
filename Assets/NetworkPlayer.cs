@@ -45,6 +45,21 @@ public class NetworkPlayer : NetworkBehaviour
     {
         Debug.Log("[NetworkPlayer] OnNetworkSpawn chamado");
 
+<<<<<<< HEAD
+=======
+        // Client initialization
+        if (IsClient)
+        {
+            playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
+            Debug.Log("[NetworkPlayer] Player index: " + playerIndex.Value);
+            SetPosition();
+            CreateCharacterVisual();
+            AssignAudio();
+            AssignGoal();
+        }
+
+        // Server-side player connection handling
+>>>>>>> b7c8382 (AudioManager and VoiceChat (in the process))
         if (IsServer)
         {
             Debug.Log("[NetworkPlayer] Sou o servidor");
@@ -171,6 +186,23 @@ public class NetworkPlayer : NetworkBehaviour
         // Aplica a mesma escala
         characterObject.transform.localScale = new Vector3(characterScale, characterScale, 1f);
     }
+<<<<<<< HEAD
+=======
+
+    private void AssignAudio()
+    {
+        // Assign audio manager to character
+        AudioManager audioManager = characterPrefab.GetComponent<AudioManager>();
+        if (audioManager == null)
+        {
+            Debug.LogError("[NetworkPlayer] Character prefab missing AudioManager!");
+            return;
+        }
+
+        audioManager.PlayBackgroundMusic();
+    }
+
+>>>>>>> b7c8382 (AudioManager and VoiceChat (in the process))
     private void OnCharacterIndexChanged(int oldIndex, int newIndex)
     {
         Debug.Log("[NetworkPlayer] Character index updated! Creating client visual.");

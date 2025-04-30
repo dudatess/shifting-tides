@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8830449012673529154}
   - component: {fileID: 6276664258369817069}
   - component: {fileID: 6657533134417764615}
+  - component: {fileID: -7348193426010632034}
   m_Layer: 0
   m_Name: characterPrefab
   m_TagString: Untagged
@@ -113,3 +114,24 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &-7348193426010632034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752205752989790034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 502731287e74e674596713bcc6c4a648, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundMusic: {fileID: 0}
+  gavelHitSound: {fileID: 8300000, guid: 7bc0f139f2f4b574fbcbd489e6b223cb, type: 3}
+  heartbeatSound: {fileID: 0}
+  corrIncorrSound: {fileID: 8300000, guid: 382ed60e39342674f973dc695b6670f0, type: 3}
+  musicVolume: 0.2
+  maxHeartbeatVolume: 0.8
+  minHeartbeatVolume: 0.2
+  gavelHitVolume: 0.5
+  corrIncorrVolume: 0.5
