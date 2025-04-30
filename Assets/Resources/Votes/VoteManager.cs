@@ -4,23 +4,38 @@ public class VoteManager : MonoBehaviour
 {
     public static int totalYes = 0;
     public static int totalNo = 0;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    public GameObject yesButton;  // Reference to the Yes button
+    public GameObject noButton;   // Reference to the No button
+
     void Start()
     {
-        
+        // Initially hide the buttons
+        yesButton.SetActive(false);
+        noButton.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        // Optionally, you can check for certain conditions to show the buttons (if needed)
     }
 
-    public void voteYes(){
+    // Method to show the buttons when needed
+    public void ShowButtons()
+    {
+        yesButton.SetActive(true);
+        noButton.SetActive(true);
+    }
+
+    // Method for Yes vote
+    public void voteYes()
+    {
         totalYes++;
     }
 
-    public void voteNo() {
+    // Method for No vote
+    public void voteNo()
+    {
         totalNo++;
     }
 }
