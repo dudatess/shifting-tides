@@ -5,71 +5,44 @@ using UnityEngine.SceneManagement;
 
 public class LobbyUI : MonoBehaviour
 {
-    [SerializeField] private Button startButton;
-    [SerializeField] private NetworkPlayer networkPlayer; // Referência ao NetworkPlayer
+    [SerializeField] private Button readyButton;
 
-   private void Start()
-{
-    startButton.gameObject.SetActive(false);
-    startButton.onClick.AddListener(StartGame);
-    
-    // Busca o NetworkPlayer do jogador LOCAL quando ele spawna
-    NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-}
+    private NetworkPlayer networkPlayer;
 
-private void OnClientConnected(ulong clientId)
-{
-    // Só executa para o jogador local
-    if (NetworkManager.Singleton.LocalClientId == clientId)
+    private void Start()
     {
-        networkPlayer = NetworkManager.Singleton.SpawnManager
-                       .GetLocalPlayerObject()
-                       .GetComponent<NetworkPlayer>();
-
-        if (networkPlayer == null)
-        {
-            Debug.LogError("NetworkPlayer não encontrado no LocalPlayer!");
-            return;
-        }
-
-        Debug.Log($"NetworkPlayer encontrado: {networkPlayer.gameObject.name}");
-
-        // Verifica se é o Host e mostra o botão quando 4 jogadores estiverem prontos
-        if (NetworkManager.Singleton.IsServer)
-        {
-            networkPlayer.OnGameReadyChanged(false, true); // Força a verificação
-        }
+        readyButton.gameObject.SetActive(false);
+        readyButton.onClick.AddListener(OnReadyClicked);
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
-}
-    
 
-    public void ShowStartButton()
+    private void OnClientConnected(ulong clientId)
     {
-        Debug.Log("[LobbyUI] ShowStartButton chamado");
-        
-        if (startButton != null)
+        if (NetworkManager.Singleton.LocalClientId == clientId)
         {
-            startButton.gameObject.SetActive(true);
-            Debug.Log("[LobbyUI] Botão ativado com sucesso");
-        }
-        else
-        {
-            Debug.LogError("[LobbyUI] Tentativa de ativar botão nulo");
+            networkPlayer = NetworkManager.Singleton.SpawnManager
+                .GetLocalPlayerObject()
+                .GetComponent<NetworkPlayer>();
+
+            if (networkPlayer == null)
+            {
+                Debug.LogError("NetworkPlayer não encontrado!");
+                return;
+            }
+
+            Debug.Log("NetworkPlayer conectado: " + networkPlayer.gameObject.name);
+
+            // Mostra o botão para o jogador local após encontrar o NetworkPlayer
+            readyButton.gameObject.SetActive(true);
         }
     }
 
-    private void StartGame()
+    private void OnReadyClicked()
     {
-        Debug.Log("[LobbyUI] Tentativa de iniciar jogo");
-        
-        if (NetworkManager.Singleton.IsServer)
+        if (networkPlayer != null)
         {
-            Debug.Log("[LobbyUI] Host confirmado, carregando cena...");
-            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-        }
-        else
-        {
-            Debug.LogWarning("[LobbyUI] StartGame chamado por cliente não-host");
+            networkPlayer.SetReadyServerRpc(true);
+            readyButton.interactable = false; // Desativa para evitar múltiplos cliques
         }
     }
 }

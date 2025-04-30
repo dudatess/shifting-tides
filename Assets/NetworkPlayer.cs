@@ -11,6 +11,15 @@ public class NetworkPlayer : NetworkBehaviour
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
 
+     private static int readyPlayerCount = 0;
+
+    private static readonly int maxPlayers = 4;
+
+    private NetworkVariable<bool> isReady = new NetworkVariable<bool>(
+        false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
     private Character character;
     private SpriteRenderer spriteRenderer;
 
@@ -46,57 +55,57 @@ public class NetworkPlayer : NetworkBehaviour
         }
     }
 
-    public override void OnNetworkSpawn()
-    {
-        // Server initialization
-        if (IsServer && IsOwner)
-        {
-            playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
-            AssignCharacter();
-        }
+    // public override void OnNetworkSpawn()
+    // {
+    //     // Server initialization
+    //     if (IsServer && IsOwner)
+    //     {
+    //         playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
+    //         AssignCharacter();
+    //     }
 
-        // Client initialization
-        if (IsClient)
-        {
-            playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
-            Debug.Log("[NetworkPlayer] Player index: " + playerIndex.Value);
-            SetPosition();
-            CreateCharacterVisual();
-            AssignGoal();
-        }
+    //     // Client initialization
+    //     if (IsClient)
+    //     {
+    //         playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
+    //         Debug.Log("[NetworkPlayer] Player index: " + playerIndex.Value);
+    //         SetPosition();
+    //         CreateCharacterVisual();
+    //         AssignGoal();
+    //     }
 
-        // Server-side player connection handling
-        if (IsServer)
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-        }
+    //     // Server-side player connection handling
+    //     if (IsServer)
+    //     {
+    //         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+    //     }
 
-        // Event subscriptions
-        isGameReady.OnValueChanged += OnGameReadyChanged;
-        characterIndex.OnValueChanged += OnCharacterIndexChanged;
-    }
+    //     // Event subscriptions
+    //     isGameReady.OnValueChanged += OnGameReadyChanged;
+    //     characterIndex.OnValueChanged += OnCharacterIndexChanged;
+    // }
 
-    private void OnClientConnected(ulong clientId)
-    {
-        // Start game when 4 players connect
-        if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
-        {
-            isGameReady.Value = true;
-        }
-    }
+    // private void OnClientConnected(ulong clientId)
+    // {
+    //     // Start game when 4 players connect
+    //     if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == 4)
+    //     {
+    //         isGameReady.Value = true;
+    //     }
+    // }
 
-    public void OnGameReadyChanged(bool oldValue, bool newValue)
-    {
-        // Show start button when game is ready
-        if (newValue && IsOwner && IsServer)
-        {
-            var lobbyUI = Object.FindFirstObjectByType<LobbyUI>();
-            if (lobbyUI != null)
-            {
-                lobbyUI.ShowStartButton();
-            }
-        }
-    }
+    // public void OnGameReadyChanged(bool oldValue, bool newValue)
+    // {
+    //     // Show start button when game is ready
+    //     if (newValue && IsOwner && IsServer)
+    //     {
+    //         var lobbyUI = Object.FindFirstObjectByType<LobbyUI>();
+    //         if (lobbyUI != null)
+    //         {
+    //            // lobbyUI.ShowStartButton();
+    //         }
+    //     }
+    // }
 
     private void AssignCharacter()
     {
@@ -201,5 +210,61 @@ public class NetworkPlayer : NetworkBehaviour
         goalIndex = randomIndex;
         Goal g = GoalManager.Instance.GetGoal(randomIndex);
         Debug.Log($"[NetworkPlayer] Goal assigned: {g.title} - {g.description}");
+    }
+     public override void OnNetworkSpawn()
+    {
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+        }
+
+        isReady.OnValueChanged += OnReadyChanged;
+
+        if (IsClient)
+        {
+            SetPosition();
+            CreateCharacterVisual();
+        }
+
+        if (IsServer && IsOwner)
+        {
+            AssignCharacter();
+        }
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        if (IsServer && NetworkManager.Singleton.ConnectedClients.Count == maxPlayers)
+        {
+            Debug.Log("[NetworkPlayer] Todos os jogadores conectados.");
+        }
+    }
+
+    [ServerRpc]
+    public void SetReadyServerRpc(bool value)
+    {
+        isReady.Value = value;
+    }
+
+    private void OnReadyChanged(bool oldVal, bool newVal)
+    {
+        if (!IsServer) return;
+
+        if (newVal)
+        {
+            readyPlayerCount++;
+            Debug.Log($"[NetworkPlayer] Jogador pronto! Total: {readyPlayerCount}/{maxPlayers}");
+        }
+        else
+        {
+            readyPlayerCount--;
+            Debug.Log($"[NetworkPlayer] Jogador ficou não pronto. Total: {readyPlayerCount}/{maxPlayers}");
+        }
+
+        if (readyPlayerCount == maxPlayers)
+        {
+            Debug.Log("[NetworkPlayer] Todos os jogadores estão prontos. Iniciando jogo...");
+            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        }
     }
 }
