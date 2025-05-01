@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using System.Collections; // Necessário para usar IEnumerator
 public class NetworkPlayer : NetworkBehaviour
 {
-    [SerializeField] private float characterScale = 5f; // Adicione esta linha com as outras variáveis
+    [SerializeField] private float characterScale = 3f; // Adicione esta linha com as outras variáveis
     [SerializeField] private GameObject characterPrefab; 
     private NetworkVariable<int> playerIndex = new NetworkVariable<int>();
     private NetworkVariable<int> characterIndex = new NetworkVariable<int>(
@@ -29,14 +29,15 @@ public class NetworkPlayer : NetworkBehaviour
     private int people = 0;
     public int goalIndex;
 
+    public int factionName;
     // Waiting room positions
 // Substitua o waitingRoomSlots por estas posições mais à esquerda
     private readonly Vector3[] waitingRoomSlots = new Vector3[]
     {
-        new Vector3(-6f, 0, 0),  // Mais à esquerda
-        new Vector3(-2f, 0, 0),
-        new Vector3(2f, 0, 0),
-        new Vector3(6f, 0, 0)    // Mais à direita
+        new Vector3(-8f, 0, 0),  // Mais à esquerda
+        new Vector3(-6f, 0, 0),
+        new Vector3(-3f, 0, 0),
+        new Vector3(2f, 0, 0)    // Mais à direita
     };
     private bool goalAssigned = false;
 
