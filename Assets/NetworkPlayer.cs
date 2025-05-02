@@ -5,7 +5,7 @@ using System.Collections; // Necessário para usar IEnumerator
 public class NetworkPlayer : NetworkBehaviour
 {
     [SerializeField] private float characterScale = 3f; // Adicione esta linha com as outras variáveis
-    [SerializeField] private GameObject characterPrefab; 
+    [SerializeField] private GameObject characterPrefab;
     private NetworkVariable<int> playerIndex = new NetworkVariable<int>();
     private NetworkVariable<int> characterIndex = new NetworkVariable<int>(
         default,
@@ -31,7 +31,7 @@ public class NetworkPlayer : NetworkBehaviour
 
     public int factionName;
     // Waiting room positions
-// Substitua o waitingRoomSlots por estas posições mais à esquerda
+    // Substitua o waitingRoomSlots por estas posições mais à esquerda
     private readonly Vector3[] waitingRoomSlots = new Vector3[]
     {
         new Vector3(-8f, 0, 0),  // Mais à esquerda
@@ -45,21 +45,6 @@ public class NetworkPlayer : NetworkBehaviour
     {
         Debug.Log("[NetworkPlayer] OnNetworkSpawn chamado");
 
-<<<<<<< HEAD
-=======
-        // Client initialization
-        if (IsClient)
-        {
-            playerIndex.Value = NetworkManager.Singleton.ConnectedClients.Count - 1;
-            Debug.Log("[NetworkPlayer] Player index: " + playerIndex.Value);
-            SetPosition();
-            CreateCharacterVisual();
-            AssignAudio();
-            AssignGoal();
-        }
-
-        // Server-side player connection handling
->>>>>>> b7c8382 (AudioManager and VoiceChat (in the process))
         if (IsServer)
         {
             Debug.Log("[NetworkPlayer] Sou o servidor");
@@ -77,11 +62,12 @@ public class NetworkPlayer : NetworkBehaviour
             }
 
             playerIndex.Value = GameSessionManager.Instance.GetNextPlayerIndex();
-            
+
             // Verifica se o índice é válido
             if (playerIndex.Value >= 0 && playerIndex.Value < waitingRoomSlots.Length)
             {
                 AssignCharacter();
+                AssignAudio();
             }
             else
             {
@@ -92,68 +78,68 @@ public class NetworkPlayer : NetworkBehaviour
         if (IsClient)
         {
             characterIndex.OnValueChanged += OnCharacterIndexChanged;
-            }
+        }
 
         isReady.OnValueChanged += OnReadyChanged;
     }
 
     private void AssignCharacter()
-{
-    if (!IsServer) return;
+    {
+        if (!IsServer) return;
 
-    // Verifica se CharacterManager está disponível
-    if (CharacterManager.Instance == null)
-    {
-        Debug.LogError("[NetworkPlayer] CharacterManager.Instance está NULL");
-        return;
-    }
+        // Verifica se CharacterManager está disponível
+        if (CharacterManager.Instance == null)
+        {
+            Debug.LogError("[NetworkPlayer] CharacterManager.Instance está NULL");
+            return;
+        }
 
-    // Se já temos um personagem, não criar outro
-    if (spriteRenderer != null && spriteRenderer.gameObject != null)
-    {
-        Debug.Log("[NetworkPlayer] Personagem já existe, apenas atualizando");
-        return;
-    }
+        // Se já temos um personagem, não criar outro
+        if (spriteRenderer != null && spriteRenderer.gameObject != null)
+        {
+            Debug.Log("[NetworkPlayer] Personagem já existe, apenas atualizando");
+            return;
+        }
 
-    int randomIndex = CharacterManager.Instance.GetRandomCharacterIndex();
-    characterIndex.Value = randomIndex;
-    character = CharacterManager.Instance.GetCharacter(randomIndex);
+        int randomIndex = CharacterManager.Instance.GetRandomCharacterIndex();
+        characterIndex.Value = randomIndex;
+        character = CharacterManager.Instance.GetCharacter(randomIndex);
 
-    if (character == null)
-    {
-        Debug.LogError("[NetworkPlayer] Character é null! Verifique CharacterManager.");
-        return;
-    }
+        if (character == null)
+        {
+            Debug.LogError("[NetworkPlayer] Character é null! Verifique CharacterManager.");
+            return;
+        }
 
-    Debug.Log("[NetworkPlayer] Personagem carregado: " + character.characterName);
-    
-    GameObject characterObject = Instantiate(characterPrefab, waitingRoomSlots[playerIndex.Value], Quaternion.identity);
-    NetworkObject netObj = characterObject.GetComponent<NetworkObject>();
-    
-    if (netObj == null)
-    {
-        Debug.LogError("[NetworkPlayer] Prefab instanciado não tem NetworkObject!");
-        Destroy(characterObject);
-        return;
+        Debug.Log("[NetworkPlayer] Personagem carregado: " + character.characterName);
+
+        GameObject characterObject = Instantiate(characterPrefab, waitingRoomSlots[playerIndex.Value], Quaternion.identity);
+        NetworkObject netObj = characterObject.GetComponent<NetworkObject>();
+
+        if (netObj == null)
+        {
+            Debug.LogError("[NetworkPlayer] Prefab instanciado não tem NetworkObject!");
+            Destroy(characterObject);
+            return;
+        }
+
+        // Verifica se o objeto já foi spawnado antes de spawnar novamente
+        if (!netObj.IsSpawned)
+        {
+            netObj.Spawn(true);
+        }
+
+        spriteRenderer = characterObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            Debug.LogError("[NetworkPlayer] Prefab instanciado não tem SpriteRenderer!");
+            return;
+        }
+
+        spriteRenderer.sprite = character.neutral;
+        characterObject.transform.localScale = new Vector3(characterScale, characterScale, 1f);
+        Debug.Log("[NetworkPlayer] Sprite aplicado: " + spriteRenderer.sprite?.name);
     }
-    
-    // Verifica se o objeto já foi spawnado antes de spawnar novamente
-    if (!netObj.IsSpawned)
-    {
-        netObj.Spawn(true);
-    }
-    
-    spriteRenderer = characterObject.GetComponent<SpriteRenderer>();
-    if (spriteRenderer == null)
-    {
-        Debug.LogError("[NetworkPlayer] Prefab instanciado não tem SpriteRenderer!");
-        return;
-    }
-    
-    spriteRenderer.sprite = character.neutral;
-    characterObject.transform.localScale = new Vector3(characterScale, characterScale, 1f);
-    Debug.Log("[NetworkPlayer] Sprite aplicado: " + spriteRenderer.sprite?.name);
-}
 
     private IEnumerator RevealCharacter(GameObject characterObject, int index)
     {
@@ -161,17 +147,17 @@ public class NetworkPlayer : NetworkBehaviour
         Vector3 startPos = new Vector3(-10f, waitingRoomSlots[index].y, 0f);
         Vector3 endPos = waitingRoomSlots[index];
         float duration = 0.5f + (index * 0.3f); // Cada personagem tem um delay diferente
-        
+
         characterObject.transform.position = startPos;
-        
+
         float elapsed = 0f;
         while (elapsed < duration)
         {
-            characterObject.transform.position = Vector3.Lerp(startPos, endPos, elapsed/duration);
+            characterObject.transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        
+
         characterObject.transform.position = endPos;
     }
     private void CreateCharacterVisual()
@@ -182,13 +168,10 @@ public class NetworkPlayer : NetworkBehaviour
         GameObject characterObject = Instantiate(characterPrefab, waitingRoomSlots[playerIndex.Value], Quaternion.identity);
         SpriteRenderer sr = characterObject.GetComponent<SpriteRenderer>();
         sr.sprite = character.neutral;
-        
+
         // Aplica a mesma escala
         characterObject.transform.localScale = new Vector3(characterScale, characterScale, 1f);
     }
-<<<<<<< HEAD
-=======
-
     private void AssignAudio()
     {
         // Assign audio manager to character
@@ -202,7 +185,6 @@ public class NetworkPlayer : NetworkBehaviour
         audioManager.PlayBackgroundMusic();
     }
 
->>>>>>> b7c8382 (AudioManager and VoiceChat (in the process))
     private void OnCharacterIndexChanged(int oldIndex, int newIndex)
     {
         Debug.Log("[NetworkPlayer] Character index updated! Creating client visual.");
@@ -276,45 +258,45 @@ public class NetworkPlayer : NetworkBehaviour
     //     }
     // }
 
-//    public override void OnNetworkSpawn()
-// {
-//     Debug.Log("[NetworkPlayer] OnNetworkSpawn chamado");
+    //    public override void OnNetworkSpawn()
+    // {
+    //     Debug.Log("[NetworkPlayer] OnNetworkSpawn chamado");
 
-//     if (IsServer)
-//     {
-//         Debug.Log("[NetworkPlayer] Sou o servidor");
+    //     if (IsServer)
+    //     {
+    //         Debug.Log("[NetworkPlayer] Sou o servidor");
 
-//         if (GameSessionManager.Instance == null)
-//         {
-//             Debug.LogError("[NetworkPlayer] GameSessionManager.Instance está NULL");
-//         }
+    //         if (GameSessionManager.Instance == null)
+    //         {
+    //             Debug.LogError("[NetworkPlayer] GameSessionManager.Instance está NULL");
+    //         }
 
-//         if (characterPrefab == null)
-//         {
-//             Debug.LogError("[NetworkPlayer] characterPrefab NÃO foi atribuído no Inspetor.");
-//         }
+    //         if (characterPrefab == null)
+    //         {
+    //             Debug.LogError("[NetworkPlayer] characterPrefab NÃO foi atribuído no Inspetor.");
+    //         }
 
-//         playerIndex.Value = GameSessionManager.Instance?.GetNextPlayerIndex() ?? 0;
-//         AssignCharacter();
-//     }
+    //         playerIndex.Value = GameSessionManager.Instance?.GetNextPlayerIndex() ?? 0;
+    //         AssignCharacter();
+    //     }
 
-//     if (IsClient)
-//     {
-//         characterIndex.OnValueChanged += OnCharacterIndexChanged;
-//         playerIndex.OnValueChanged += OnPlayerIndexChanged;
-//     }
+    //     if (IsClient)
+    //     {
+    //         characterIndex.OnValueChanged += OnCharacterIndexChanged;
+    //         playerIndex.OnValueChanged += OnPlayerIndexChanged;
+    //     }
 
-//     isReady.OnValueChanged += OnReadyChanged;
-// }
+    //     isReady.OnValueChanged += OnReadyChanged;
+    // }
 
 
     private void OnPlayerIndexChanged(int oldIndex, int newIndex)
-        {
-            SetPosition();
-            CreateCharacterVisual();
-        }
+    {
+        SetPosition();
+        CreateCharacterVisual();
+    }
 
-    
+
 
 
     private void OnClientConnected(ulong clientId)
