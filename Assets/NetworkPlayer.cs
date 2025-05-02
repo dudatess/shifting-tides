@@ -67,7 +67,6 @@ public class NetworkPlayer : NetworkBehaviour
             if (playerIndex.Value >= 0 && playerIndex.Value < waitingRoomSlots.Length)
             {
                 AssignCharacter();
-                AssignAudio();
             }
             else
             {
@@ -171,18 +170,6 @@ public class NetworkPlayer : NetworkBehaviour
 
         // Aplica a mesma escala
         characterObject.transform.localScale = new Vector3(characterScale, characterScale, 1f);
-    }
-    private void AssignAudio()
-    {
-        // Assign audio manager to character
-        AudioManager audioManager = characterPrefab.GetComponent<AudioManager>();
-        if (audioManager == null)
-        {
-            Debug.LogError("[NetworkPlayer] Character prefab missing AudioManager!");
-            return;
-        }
-
-        audioManager.PlayBackgroundMusic();
     }
 
     private void OnCharacterIndexChanged(int oldIndex, int newIndex)

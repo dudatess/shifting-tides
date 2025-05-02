@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1452857372190505220}
   - component: {fileID: 3603290168458235133}
   - component: {fileID: -6414290406111002662}
+  - component: {fileID: 3710531318809564910}
   m_Layer: 0
   m_Name: PlayerTest
   m_TagString: Untagged
@@ -71,5 +72,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  characterScale: 3
   characterPrefab: {fileID: 752205752989790034, guid: ebd2043701c661d4a9cbcc7d55e7506a, type: 3}
   goalIndex: 0
+  factionName: 0
+--- !u!81 &3710531318809564910
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280769760358095325}
+  m_Enabled: 1

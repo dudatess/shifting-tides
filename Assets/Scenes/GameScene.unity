@@ -779,6 +779,7 @@ GameObject:
   - component: {fileID: 425392913}
   - component: {fileID: 425392912}
   - component: {fileID: 425392911}
+  - component: {fileID: 425392915}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -840,6 +841,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &425392915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425392910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 502731287e74e674596713bcc6c4a648, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundMusic: {fileID: 8300000, guid: 273d80d8f7560a448a8d8cdde4557e1e, type: 3}
+  gavelHitSound: {fileID: 8300000, guid: 7bc0f139f2f4b574fbcbd489e6b223cb, type: 3}
+  heartbeatSound: {fileID: 8300000, guid: 816c455ec537d5d43bdfeeff34e2b818, type: 3}
+  corrIncorrSound: {fileID: 8300000, guid: 382ed60e39342674f973dc695b6670f0, type: 3}
+  musicVolume: 0.2
+  maxHeartbeatVolume: 0.8
+  minHeartbeatVolume: 0.2
+  gavelHitVolume: 0.5
+  corrIncorrVolume: 0.5
 --- !u!1 &453996702
 GameObject:
   m_ObjectHideFlags: 0
