@@ -8,12 +8,12 @@ public class CardUtils : MonoBehaviour
     public void Start() {
         card.SetActive(false);
     }
-    public void closeCard() {
-         card.SetActive(false);
+    public static void closeCard(GameObject cardParameter) {
+         cardParameter.SetActive(false);
     }
 
-    public void openCard() {
-        card.SetActive(true);
+    public static void openCard(GameObject cardParameter) {
+        cardParameter.SetActive(true);
     }
     
 }

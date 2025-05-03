@@ -40,16 +40,18 @@ public class FactionInputModal : MonoBehaviour
     }
 
     
-    private void OnHostClicked()
+    public void OnHostClicked()
     {
         isHost = true;
+        CardUtils.openCard(modalPanel);
     //    NetworkManager.Singleton.StartHost();
     //     OnConnectionStarted();
     }
 
-    private void OnClientClicked()
+    public void OnClientClicked()
     {
         isHost = false;
+        CardUtils.openCard(modalPanel);
         // NetworkManager.Singleton.StartClient();
         // OnConnectionStarted();
     }

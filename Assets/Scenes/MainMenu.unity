@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 356115213}
   - component: {fileID: 356115215}
   - component: {fileID: 356115214}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -822,7 +822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb27a2e35aedea0a0b12a32e7e3ccd9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modalPanel: {fileID: 766539919}
+  modalPanel: {fileID: 532237278}
   factionInput: {fileID: 970691995}
   hostButton: {fileID: 1334457106}
   clientButton: {fileID: 921795612}
@@ -1072,7 +1072,7 @@ GameObject:
   - component: {fileID: 712409191}
   - component: {fileID: 712409193}
   - component: {fileID: 712409192}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1657,7 +1657,7 @@ GameObject:
   - component: {fileID: 921795614}
   - component: {fileID: 921795613}
   - component: {fileID: 921795612}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: ClientButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1728,9 +1728,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 532237279}
-        m_TargetAssemblyTypeName: CardUtils, Assembly-CSharp
-        m_MethodName: openCard
+      - m_Target: {fileID: 532237282}
+        m_TargetAssemblyTypeName: FactionInputModal, Assembly-CSharp
+        m_MethodName: OnClientClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1969,7 +1969,7 @@ GameObject:
   - component: {fileID: 1065955792}
   - component: {fileID: 1065955791}
   - component: {fileID: 1065955795}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2026,7 +2026,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -2085,7 +2085,7 @@ GameObject:
   - component: {fileID: 1078819253}
   - component: {fileID: 1078819252}
   - component: {fileID: 1078819251}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Rules
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2159,10 +2159,10 @@ MonoBehaviour:
       - m_Target: {fileID: 2035851910}
         m_TargetAssemblyTypeName: CardUtils, Assembly-CSharp
         m_MethodName: openCard
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1078819249}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2422,7 +2422,7 @@ GameObject:
   - component: {fileID: 1334457108}
   - component: {fileID: 1334457107}
   - component: {fileID: 1334457106}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: HostButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2493,9 +2493,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 532237279}
-        m_TargetAssemblyTypeName: CardUtils, Assembly-CSharp
-        m_MethodName: openCard
+      - m_Target: {fileID: 532237282}
+        m_TargetAssemblyTypeName: FactionInputModal, Assembly-CSharp
+        m_MethodName: OnHostClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2903,7 +2903,7 @@ GameObject:
   - component: {fileID: 1923518707}
   - component: {fileID: 1923518709}
   - component: {fileID: 1923518708}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3360,10 +3360,10 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1476444530}
-  - {fileID: 1065955794}
   - {fileID: 768375175}
   - {fileID: 1152088675}
   - {fileID: 60090233}
+  - {fileID: 1065955794}
   - {fileID: 2091004497}
   - {fileID: 2035851909}
   - {fileID: 532237281}

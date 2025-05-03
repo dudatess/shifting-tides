@@ -30,6 +30,7 @@ public class NetworkPlayer : NetworkBehaviour
     public int goalIndex;
 
     public int factionName;
+
     // Waiting room positions
 // Substitua o waitingRoomSlots por estas posições mais à esquerda
     private readonly Vector3[] waitingRoomSlots = new Vector3[]

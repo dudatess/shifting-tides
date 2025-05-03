@@ -18,14 +18,16 @@ public class GameSessionManager : NetworkBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public int GetNextPlayerIndex()
+        public int GetNextPlayerIndex()
     {
-        if (playerCounter >= 4) // Max players
+        if (playerCounter >= 4)
         {
-            Debug.LogError("Número máximo de jogadores alcançado!");
-            return 3; // Retorna o último slot
+            Debug.LogError("Max players reached!");
+            return -1; // Return invalid index instead of forcing a value
         }
         
-        return playerCounter++;
+        int index = playerCounter;
+        playerCounter++;
+        return index;
     }
 }
